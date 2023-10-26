@@ -1,8 +1,9 @@
 # TME_Analyzer
 ## Getting started
 
-instructons:
-get python version 3.8.10
+### Venv
+
+Get python version 3.8.10
 - Create a venv: `python.exe -m venv .venv`
 - Activate the environment `./.venv/Scripts/Activate.ps1`; 
   - Maybe with an execution policy:  `powershell -ExecutionPolicy Bypass -File "./.venv/Scripts/Activate.ps1"`
@@ -11,7 +12,11 @@ get python version 3.8.10
   
 And run: `python.exe TME_analyzer_test.py`
 
+### Conda
 
+Run: `mamba env create -f environment.yml`
+
+And run: `python.exe TME_analyzer_test.py`
 
 # Cx-Freeze
 
