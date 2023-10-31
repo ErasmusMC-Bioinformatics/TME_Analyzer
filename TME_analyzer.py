@@ -76,58 +76,54 @@ class TextOut(tkinter.Text):
     def flush(self):
         pass
 
-# def DestroyTK(tk_param):
-#     try:
-#         tk_param.destroy()
-#     except tkinter.TclError:
-#         pass
-#     except ttkinter.TclError:
-#         pass
-
-# def popupmsg(msg, self_control=True):
-#     def Quit(*a):
-#         popupnew2 = tkinter.Tk()
-#         popupnew2.wm_title("!")
-#         label2 = tkinter.Label(popupnew2, text="This will stop the current" +
-#                                " operation following this iteration!\n" +
-#                                "Are you sure?")
-#         label2.pack(side="top", fill="x", pady=10)
-#         B1 = tkinter.Button(popupnew2, text="Go Ahead",
-#                             command=lambda: [DestroyTK(popupnew2),
-#                                              DestroyTK(popupnew)])
-#         B1.pack()
-#         B2 = tkinter.Button(popupnew2, text="Go Back",
-#                             command=lambda:[DestroyTK(popupnew2)])
-#         B2.pack()
-#         popupnew2.mainloop()
-#     popupnew = tkinter.Tk()
-#     popupnew.wm_title("!")
-#     label = tkinter.Label(popupnew, text=msg)
-#     label.pack(side="top", fill="x", pady=10)
-#     if self_control:
-#         B1 = tkinter.Button(popupnew, text="Okay", command=lambda:[DestroyTK(popupnew)])
-#         B1.pack()
-#     else:
-#         popupnew.protocol("WM_DELETE_WINDOW", Quit)
-#     popupnew.update()
-#     return popupnew, label
-
 def check_consent():
+    def popup_license():
+        popuplicense = tkinter.Tk()
+        popuplicense.wm_title("License")
+        label = tkinter.Label(
+            popuplicense, text='MIT License\n'+
+            '\nCopyright (c) 2023 github.com/balciemrah\n' +
+            '\nPermission is hereby granted, free of charge, to any person obtaining a copy ' +
+            '\nof this software and associated documentation files (the "Software"), to deal ' +
+            '\nin the Software without restriction, including without limitation the rights ' +
+            '\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell ' +
+            '\ncopies of the Software, and to permit persons to whom the Software is ' +
+            '\nfurnished to do so, subject to the following conditions:\n' +
+            '\nThe above copyright notice and this permission notice shall be included in all ' +
+            '\ncopies or substantial portions of the Software. \n' +
+            '\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR ' +
+            '\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, ' +
+            '\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE ' +
+            '\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER ' +
+            '\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, ' +
+            '\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE ' +
+            'SOFTWARE.')
+        label.pack(side="top", fill="x", pady=10)
+        B1 = tkinter.Button(popuplicense, text="Agree", command=lambda: [
+                popupnew.destroy(), popuplicense.destroy(), consent_given()])
+        B1.pack()
+        B2 = tkinter.Button(popuplicense, text="Disagree", command=lambda: [
+            popupnew.destroy(), popuplicense.destroy()])
+        B2.pack()
+        popupnew.mainloop()
     popupnew = tkinter.Tk()
     popupnew.wm_title("User Agreement")
-    label = tkinter.Label(popupnew, text='This software is intended only ' +
-                          'for research purposes within the Tumor ' +
-                          'Immunology group,\nDepartment of Medical ' +
-                          'Oncology in Erasmus MC, The Netherlands\n' +
-                          'with direct consent from H. Emrah' +
-                          ' Balcioglu (github.com/balciemrah)\nor ' +
-                          'Reno Debets (j.debets@erasmusmc.nl).\n\nBy ' +
+    label = tkinter.Label(popupnew, text='This software is a tool created '+
+                          'by Dr. H. Emrah Balcioglu (github.com/balciemrah)\n'+
+                          'in the Tumor Immunology group, (PI. Reno Debets, ' + 
+                          'j.debets@erasmusmc.nl)\nDepartment ' +
+                          'of Medical Oncology in Erasmus MC, The Netherlands\n' +
+                          'for interrogating the tumor microenvironment ' +
+                          'and is provided "as is".\n\nBy ' +
                           'pressing agree and using this software you ' +
-                          'confirm that you have read this ' +
-                          'statement and meet the required criteria.')
+                          'confirm that you have read\nthis ' +
+                          'statement and agree with the attached (MIT) License Agreement.')
     label.pack(side="top", fill="x", pady=10)
     B1 = tkinter.Button(popupnew, text="Agree", command=lambda: [
             popupnew.destroy(), consent_given()])
+    B1.pack()
+    B1 = tkinter.Button(popupnew, text="View License", command=lambda: [
+            popup_license()])
     B1.pack()
     B2 = tkinter.Button(popupnew, text="Disagree", command=popupnew.destroy)
     B2.pack()
@@ -201,14 +197,16 @@ class ImageAnalysis:
         dataMenu.add_command(label="Phenotype Selection",
                              command=lambda:[dMO.PhenotypeSelection(self)])
         dataMenu.add_command(label="Data Analysis", command=lambda:[dMO.DataAnalysis(self)])
-        dataMenu.add_command(label="Redo cell Quantification",
+        dataMenu.add_command(label="Redo Cell Quantification",
                              command=lambda:[dMO.Get_cell_props(self, True)])
-        dataMenu.add_command(label="Redo Rissue Quantification",
+        dataMenu.add_command(label="Redo Tissue Quantification",
                              command=lambda:[iMO.Tissue_analysis(self, 
                                  external_use = True)])
         dataMenu.add_separator()
-        dataMenu.add_command(label="Quick Analysis",
-                             command=lambda:[dMO.QuickAnalysis(self)])
+        dataMenu.add_command(label="Apply Analysis to All",
+                             command=lambda:[dMO.QuickAnalysisAll(self)])
+        dataMenu.add_command(label="Reanalyze Image Like ...",
+                             command=lambda:[dMO.QuickAnalysisLike(self)])
         dataMenu.add_separator()
         dataMenu.add_command(label="Redo Analysis",
                              command=lambda:[dMO.RedoAnalysis(self)])
@@ -306,16 +304,25 @@ class ImageAnalysis:
         self.mainWindow.pack(side=tkinter.RIGHT)
 
     def PerformDefinitions(self, default_setup, show_messages):
-        self.LUT = {"green": [0, 1, 0],
-                    "yellow": [1, 1, 0],
-                    "red": [1, 0, 0],
-                    "cyan": [0, 1, 1],
+        self.LUT = {"red": [1, 0, 0],
+                    "green": [0, 1, 0],
                     "blue": [0, 0, 1],
+                    "cyan": [0, 1, 1],
                     "magenta": [1, 0, 1],
-                    "orange": [1, 0.5, 0],
+                    "yellow": [1, 1, 0],
+                    "white": [1, 1, 1],
+                    "gray": [0.5, 0.5, 0.5],
                     "black": [0, 0, 0],
+                    "aquamarine": [0.5, 1, 0.83],
+                    "coral": [1, 0.5, 0.3],
+                    "crimson": [0.85, 0.1, 0.3],
+                    "gold": [1, 0.83, 0],
+                    "lavender": [0.9, 0.9, 0.98],
+                    "olive": [0.5, 0.5, 0],
+                    "orange": [1, 0.5, 0],
+                    "orchid": [0.85, 0.44, 0.84],
                     "pink": [1, 0.75, 0.8],
-                    "white": [1, 1, 1]}
+                    "teal": [0, 0.5, 0.5]}
         self.all_lookup_markers = {
                 0: ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9",
                     "C10"]}
@@ -619,7 +626,7 @@ class ImageAnalysis:
             color_variable[i].trace("w", self.cc_changed)
             c.append(tkinter.OptionMenu(internal_windows,
                                         color_variable[i],
-                                        *self.Color_info))
+                                        *self.LUT.keys()))
             c[i].config(width=10)
             c[i].pack(side=tkinter.LEFT)
 
@@ -642,7 +649,7 @@ class ImageAnalysis:
             color_variable[i].trace("w", self.cc_changed)
             c.append(tkinter.OptionMenu(internal_windows,
                                         color_variable[i],
-                                        *self.Color_info))
+                                        *self.LUT.keys()))
             c[i].config(width=10)
             c[i].pack(side=tkinter.LEFT)
             self.check_boxes.append(tkinter.IntVar(internal_windows))

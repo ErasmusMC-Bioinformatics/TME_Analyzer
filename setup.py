@@ -12,7 +12,7 @@ base = None
 if sys.platform == 'win32':
     base = "Win32GUI"
 
-executables = [cx_Freeze.Executable("TME_analyzer_test.py", base=base)]
+executables = [cx_Freeze.Executable("TME_analyzer.py", base=base)]
 
 cx_Freeze.setup(
     name = "Image Analysis",

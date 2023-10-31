@@ -52,13 +52,6 @@ def PhenotypeSelection(self):
             [pop2, x] = popupmsg("Your adjustment is expected to change" +
                                     " phenotyping. \nThe data is currently" +
                                     " being reanalyzed. Please hold.", False)
-#                int_popup.wm_title("Reperforming Analysis")
-#                label = tkinter.Label(
-#                        int_popup, text="Your adjustment is expected" +
-#                        " to change phenotyping, so the data is currently" +
-#                        " being reanalyzed. Please hold.")
-#                label.pack(side="top", fill="x", pady=10)
-#                int_popup.update()
             segName = self.SegName.get()
             analysis_params = self.analysis_params[self.activeImage].copy()
             if segName in analysis_params["Phenotypes"]:
@@ -3655,52 +3648,50 @@ def Get_cell_props(self, external_use = False):
     self.analyze_index[self.activeImage] = analyze_index
     self.im_analyzed[self.activeImage] = im_analyzed
 
-def QuickAnalysis(self):
-    def QuickIntAnalysisLike(*a):
-        def QuickIntAnalysisLike2(*a):
-            popup2 = tkinter.Tk()
-            popup2.wm_title("Are you sure?")
-            label = ttkinter.Label(
-                    popup2, text="You are about to overwrite all your" +
-                    " current analysis")
-            label.pack(side="top", fill="x", pady=10)
-            B1 = ttkinter.Button(
-                    popup2, text="Okay",
-                    command=lambda: [DestroyTK(popup2),
-                                     QuickAnalysisLikeSure(self),
-                                     DestroyTK(self.popup)])
-            B1.pack()
-            B2 = ttkinter.Button(popup2, text="Go Back",
-                                    command=lambda:[DestroyTK(popup2)])
-            B2.pack()
-            popup2.mainloop()
+def QuickAnalysisLike(self):
+    def QuickIntAnalysisLike2(*a):
+        popup2 = tkinter.Tk()
+        popup2.wm_title("Are you sure?")
+        label = ttkinter.Label(
+                popup2, text="You are about to overwrite all your" +
+                " current analysis")
+        label.pack(side="top", fill="x", pady=10)
+        B1 = ttkinter.Button(
+                popup2, text="Okay",
+                command=lambda: [DestroyTK(popup2),
+                                    QuickAnalysisLikeSure(self)])
+        B1.pack()
+        B2 = ttkinter.Button(popup2, text="Go Back",
+                                command=lambda:[DestroyTK(popup2)])
+        B2.pack()
+        popup2.mainloop()
 
-        def get_tick_values(*args):
-            ImagePointer = active_image.get()
-            n_start = 1
-            n_end = 1
-            while True:
-                if any(x in ImagePointer[n_end] for x in
-                        ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']):
-                    n_end = n_end+1
-                else:
-                    break
-            self.Analysis_like = np.int32(ImagePointer[n_start:n_end])
-        popup = tkinter.Tk()
-        active_image = tkinter.StringVar(popup)
-        active_image.set('(' + str(self.activeImage) + ', '
-                            + self.FileDictionary[self.activeImage] + ')')
-        active_image.trace("w", get_tick_values)
-        w = tkinter.OptionMenu(popup, active_image,
-                                *self.FileDictionary.items())
-        w.pack(side=tkinter.TOP)
-        folderButton = ttkinter.Button(popup, text="Confirm",
-                                        command=lambda: [
-                                            get_tick_values(),
-                                            DestroyTK(popup),
-                                            QuickIntAnalysisLike2()])
-        folderButton.pack()
-        popup.mainloop()
+    def get_tick_values(*args):
+        ImagePointer = active_image.get()
+        n_start = 1
+        n_end = 1
+        while True:
+            if any(x in ImagePointer[n_end] for x in
+                    ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']):
+                n_end = n_end+1
+            else:
+                break
+        self.Analysis_like = np.int32(ImagePointer[n_start:n_end])
+    popup = tkinter.Tk()
+    active_image = tkinter.StringVar(popup)
+    active_image.set('(' + str(self.activeImage) + ', '
+                        + self.FileDictionary[self.activeImage] + ')')
+    active_image.trace("w", get_tick_values)
+    w = tkinter.OptionMenu(popup, active_image,
+                            *self.FileDictionary.items())
+    w.pack(side=tkinter.TOP)
+    folderButton = ttkinter.Button(popup, text="Confirm",
+                                    command=lambda: [
+                                        get_tick_values(),
+                                        DestroyTK(popup),
+                                        QuickIntAnalysisLike2()])
+    folderButton.pack()
+    popup.mainloop()
 
     def QuickAnalysisSure(*a):
         self.im_analyzed[self.activeImage] = []
@@ -3853,7 +3844,6 @@ def QuickAnalysis(self):
                             dtype=bool)
         DAPI_thres = [np.zeros(n_channels),
                         np.full(n_channels, np.inf)]
-#        DAPI_thres[0][3] = 0.015
         DAPI_thres[0][Channel_pointers.index("DAPI")] = np.float(
                 self.QuickParams_DAPIthres.get())
         for i in range(n_channels):
@@ -3861,7 +3851,6 @@ def QuickAnalysis(self):
                 im_temp = (im_temp) | (((
                         im_raw[:, :, i]) >= DAPI_thres[0][i]) & ((
                                 im_raw[:, :, i]) <= DAPI_thres[1][i]))
-        # im_temp = ndi.morphology.binary_opening(im_temp)
         analyze_index.append("DAPI")
         DAPI_mask = im_temp.copy() > 0
         im_analyzed.append(DAPI_mask)
@@ -3901,10 +3890,6 @@ def QuickAnalysis(self):
                                     nearest_neighbor_radius)),
                 labels=cell_clusters > 0)
         ws_markers = ndi.label(ws_local_maxi)[0]
-#        if water_nuc:
-#            cluster_labels = skimage.segmentation.watershed(
-#                def_DAPI_image, ws_markers, mask=cell_clusters > 0)
-#        else:
         cluster_labels = skimage.segmentation.watershed(
             -ws_dist, ws_markers, mask=cell_clusters > 0)
         cluster_labels = skimage.measure.label(cluster_labels)
@@ -3977,8 +3962,6 @@ def QuickAnalysis(self):
                 if s1[Channel_pointers.index(
                         pheno_channel_list[i])] > pheno_thres[i]:
                     pheno_list[j].append(pheno_thres_name[i])
-#        pheno_thres_name.append('Tumor+')
-#        pheno_thres_name.append('Stroma+')
         for i in range(len(segment_list)):
             segment_list[i] = ["All"]
             if Tumor_mask[nucleus_centroids[i][0],
@@ -4022,361 +4005,33 @@ def QuickAnalysis(self):
         self.remake_side_window()
         DestroyTK(self.popup)
 
-    def QuickIntAnalysisAll(*a):
-        def QuickAnalysisAllSure(*a):
-            self.Analysis_like = self.activeImage
-            [popup, label] = popupmsg("...", False)
-            for self.activeImage in range(len(self.FileDictionary)):
-                label['text'] = ("Analyzing image " +
-                                    str(self.activeImage + 1) + " of " +
-                                    str(len(self.FileDictionary)) +
-                                    " images.\n Please hold.")
-                popup.update()
-                QuickAnalysisLikeSure(self)
-            DestroyTK(popup)
-        popup2 = tkinter.Tk()
-        popup2.wm_title("Are you sure?")
-        label = ttkinter.Label(
-                popup2,
-                text="You are about to overwrite all your analysis")
-        label.pack(side="top", fill="x", pady=10)
-        B1 = ttkinter.Button(
-                popup2, text="Okay",
-                command=lambda: [DestroyTK(popup2),
-                                    QuickAnalysisAllSure(),
-                                    DestroyTK(self.popup)])
-        B1.pack()
-        B2 = ttkinter.Button(popup2, text="Go Back",
-                                command=lambda:[DestroyTK(popup2)])
-        B2.pack()
-        popup2.mainloop()
-
-    def QuickIntAnalysis(*a):
-        popup2 = tkinter.Tk()
-        popup2.wm_title("Are you sure?")
-        label = ttkinter.Label(popup2, text="You are about to overwrite" +
-                                " all your current analysis")
-        label.pack(side="top", fill="x", pady=10)
-        B1 = ttkinter.Button(
-                popup2, text="Okay",
-                command=lambda: [DestroyTK(popup2),
-                                    QuickAnalysisSure()])
-        B1.pack()
-        B2 = ttkinter.Button(popup2, text="Go Back",
-                                command=lambda:[DestroyTK(popup2)])
-        B2.pack()
-        popup2.mainloop()
-
-    def rmvQuick(*a):
-        if np.int32(self.QuickPheno[-2].get())*6 < np.size(self.QuickPheno):
-            ch_num = np.int32(self.QuickPheno[-2].get())
-            DestroyTK(self.QuickPheno[(ch_num-1)*6])
-            for x in range(6):
-                self.QuickPheno.pop((ch_num-1)*6)
-
-    def addQuick(*a):
-        DestroyTK(self.QuickPheno[-3])
-        DestroyTK(self.QuickPheno[-1])
-        x1_pointers = ['Nucleus', 'Cell']
-        x2_pointers = self.Channel_pointers[self.activeImage]
-        x3_pointers = ['Mean Intensity', 'Maximum Intensity',
-                        'Minimum Intensity', 'Total Intensity',
-                        'STD Intensity']
-        self.QuickPheno.pop()
-        self.QuickPheno.pop()
-        self.QuickPheno.pop()
-        internal_windows = tkinter.Frame(self.popup, width=200, height=10)
-        internal_windows.pack(side=tkinter.TOP)
-        self.QuickPheno.append(internal_windows)
-        x_variable1 = tkinter.StringVar(internal_windows)
-        x_variable1.set(x1_pointers[1])
-        self.QuickPheno.append(x_variable1)
-        x_var_pointer1 = tkinter.OptionMenu(internal_windows, x_variable1,
-                                            *x1_pointers)
-        x_var_pointer1.config(width=10)
-        x_var_pointer1.pack(side=tkinter.LEFT)
-        x_variable2 = tkinter.StringVar(internal_windows)
-        x_variable2.set(x2_pointers[0])
-        self.QuickPheno.append(x_variable2)
-        x_var_pointer2 = tkinter.OptionMenu(internal_windows, x_variable2,
-                                            *x2_pointers)
-        x_var_pointer2.config(width=10)
-        x_var_pointer2.pack(side=tkinter.LEFT)
-        x_variable3 = tkinter.StringVar(internal_windows)
-        x_variable3.set(x3_pointers[1])
-        self.QuickPheno.append(x_variable3)
-        x_var_pointer3 = tkinter.OptionMenu(internal_windows, x_variable3,
-                                            *x3_pointers)
-        x_var_pointer3.config(width=20)
-        x_var_pointer3.pack(side=tkinter.LEFT)
-        labelButton = tkinter.Entry(internal_windows)
-        self.QuickPheno.append(labelButton)
-        labelButton.pack(side=tkinter.LEFT)
-        labelButton.insert(0, "10")
-        labelButton.config(width=20)
-        labelButton = tkinter.Entry(internal_windows)
-        self.QuickPheno.append(labelButton)
-        labelButton.pack(side=tkinter.LEFT)
-        labelButton.insert(0, x2_pointers[0] + "+")
-        labelButton.config(width=20)
-        internal_windows = tkinter.Frame(self.popup, width=200, height=10)
-        internal_windows.pack(side=tkinter.TOP)
-        self.QuickPheno.append(internal_windows)
-        addQuickButton = ttkinter.Button(
-                internal_windows, text="Add Phenotype", command=addQuick)
-        addQuickButton.pack(side=tkinter.LEFT, padx=2, pady=2)
-        rmvQuickButton = ttkinter.Button(
-                internal_windows, text="Remove Phenotype",
-                command=rmvQuick)
-        rmvQuickButton.pack(side=tkinter.LEFT, padx=2, pady=2)
-        labelButton = tkinter.Entry(internal_windows)
-        self.QuickPheno.append(labelButton)
-        labelButton.pack(side=tkinter.LEFT)
-        labelButton.insert(0, "1")
-        internal_windows = tkinter.Frame(self.popup, width=200, height=10)
-        internal_windows.pack(side=tkinter.TOP)
-        self.QuickPheno.append(internal_windows)
-        doQuickButton = ttkinter.Button(
-                internal_windows, text="Perform Analysis",
-                command=QuickIntAnalysis)
-        doQuickButton.pack(side=tkinter.LEFT, padx=2, pady=2)
-    popup = tkinter.Tk()
-    self.popup = popup
-    popup.geometry("600x800")
-    popup.wm_title("Quick Analysis")
-    internal_windows = tkinter.Frame(self.popup,
-                                        width=200, height=20)
-    internal_windows.pack(side=tkinter.TOP)
-    label = ttkinter.Label(internal_windows, text='Foreground Threshold',
-                            anchor="e")
-    label.config(width=30)
-    label.pack(side=tkinter.LEFT)
-    labelButton = tkinter.Entry(internal_windows)
-    self.QuickParams_Fore = labelButton
-    labelButton.pack()
-    labelButton.insert(0, "1.4")
-    internal_windows = tkinter.Frame(self.popup, width=200, height=20)
-    internal_windows.pack(side=tkinter.TOP)
+def QuickAnalysisAll(self):
+    def QuickAnalysisAllSure(*a):
+        self.Analysis_like = self.activeImage
+        [popup, label] = popupmsg("...", False)
+        for self.activeImage in range(len(self.FileDictionary)):
+            label['text'] = ("Analyzing image " +
+                                str(self.activeImage + 1) + " of " +
+                                str(len(self.FileDictionary)) +
+                                " images.\n Please hold.")
+            popup.update()
+            QuickAnalysisLikeSure(self)
+        DestroyTK(popup)
+    popup2 = tkinter.Tk()
+    popup2.wm_title("Are you sure?")
     label = ttkinter.Label(
-            internal_windows, text='The thresholding for t' +
-            'issue, it is done in the DAPI channel')
-    label.config(width=200)
-    label.pack(side=tkinter.LEFT)
-    internal_windows = tkinter.Frame(self.popup,
-                                        width=200, height=20)
-    internal_windows.pack(side=tkinter.TOP)
-    label = ttkinter.Label(internal_windows, text='Hole Size',
-                            anchor="e")
-    label.config(width=30)
-    label.pack(side=tkinter.LEFT)
-    labelButton = tkinter.Entry(internal_windows)
-    self.QuickParams_Hole = labelButton
-    labelButton.pack()
-    labelButton.insert(0, "2000")
-    internal_windows = tkinter.Frame(self.popup, width=200, height=20)
-    internal_windows.pack(side=tkinter.TOP)
-    label = ttkinter.Label(internal_windows, text='The size of the' +
-                            ' minimum empty area accepted, fills up' +
-                            ' holes in the image')
-    label.config(width=200)
-    label.pack(side=tkinter.LEFT)
-    internal_windows = tkinter.Frame(self.popup, width=200, height=20)
-    internal_windows.pack(side=tkinter.TOP)
-    label = ttkinter.Label(internal_windows, text='(>1 are taken as' +
-                            ' absolute areas in pixels, <=1 are taken' +
-                            ' as relative amounts to max hole size)')
-    label.config(width=200)
-    label.pack(side=tkinter.LEFT)
-
-    internal_windows = tkinter.Frame(self.popup, width=200, height=20)
-    internal_windows.pack(side=tkinter.TOP)
-    label = ttkinter.Label(internal_windows, text='Feature Size',
-                            anchor="e")
-    label.config(width=30)
-    label.pack(side=tkinter.LEFT)
-    labelButton = tkinter.Entry(internal_windows)
-    self.QuickParams_Feat = labelButton
-    labelButton.pack()
-    labelButton.insert(0, "0.1")
-    internal_windows = tkinter.Frame(self.popup, width=200, height=10)
-    internal_windows.pack(side=tkinter.TOP)
-    label = ttkinter.Label(internal_windows, text='The size of the' +
-                            ' minimum image area accepted, removes small' +
-                            ' foreground fragments')
-    label.config(width=200)
-    label.pack(side=tkinter.LEFT)
-    internal_windows = tkinter.Frame(self.popup, width=200, height=10)
-    internal_windows.pack(side=tkinter.TOP)
-    label = ttkinter.Label(internal_windows, text='(>1 are taken as' +
-                            ' absolute areas in pixels, <=1 are taken' +
-                            ' as relative amounts to max feature size)')
-    label.config(width=200)
-    label.pack(side=tkinter.LEFT)
-
-    internal_windows = tkinter.Frame(self.popup, width=200, height=20)
-    internal_windows.pack(side=tkinter.TOP)
-    label = ttkinter.Label(internal_windows, text='CK threshold',
-                            anchor="e")
-    label.config(width=30)
-    label.pack(side=tkinter.LEFT)
-    labelButton = tkinter.Entry(internal_windows)
-    self.QuickParams_CKthres = labelButton
-    labelButton.pack()
-    labelButton.insert(0, "2")
-    internal_windows = tkinter.Frame(self.popup, width=200, height=10)
-    internal_windows.pack(side=tkinter.TOP)
-    label = ttkinter.Label(
-            internal_windows, text='Thresholding on Cytokeratin channel' +
-            ' for detecion of Tumor area')
-    label.config(width=200)
-    label.pack(side=tkinter.LEFT)
-
-    internal_windows = tkinter.Frame(self.popup, width=200, height=20)
-    internal_windows.pack(side=tkinter.TOP)
-    label = ttkinter.Label(internal_windows, text='DAPI Threshold',
-                            anchor="e")
-    label.config(width=30)
-    label.pack(side=tkinter.LEFT)
-    labelButton = tkinter.Entry(internal_windows)
-    self.QuickParams_DAPIthres = labelButton
-    labelButton.pack()
-    labelButton.insert(0, "5")
-    internal_windows = tkinter.Frame(self.popup, width=200, height=10)
-    internal_windows.pack(side=tkinter.TOP)
-    label = ttkinter.Label(internal_windows, text='Thresholding on DAPI' +
-                            ' channel for detecion of Nuclei')
-    label.config(width=200)
-    label.pack(side=tkinter.LEFT)
-
-    internal_windows = tkinter.Frame(self.popup, width=200, height=20)
-    internal_windows.pack(side=tkinter.TOP)
-    label = ttkinter.Label(internal_windows, text='Nuclear size limits',
-                            anchor="e")
-    label.config(width=30)
-    label.pack(side=tkinter.LEFT)
-    labelButton = tkinter.Entry(internal_windows)
-    self.QuickParams_NucLow = labelButton
-    labelButton.pack(side=tkinter.LEFT)
-    labelButton.insert(0, "100")
-    label = ttkinter.Label(internal_windows, text=' - ')
-    label.config(width=3)
-    label.pack(side=tkinter.LEFT)
-    labelButton2 = tkinter.Entry(internal_windows)
-    self.QuickParams_NucHigh = labelButton2
-    labelButton2.pack(side=tkinter.LEFT)
-    labelButton2.insert(0, "1000")
-    internal_windows = tkinter.Frame(self.popup, width=200, height=10)
-    internal_windows.pack(side=tkinter.TOP)
-    label = ttkinter.Label(internal_windows, text='Nucleus area range used'
-                            ' for nuclear segmentation')
-    label.config(width=200)
-    label.pack(side=tkinter.LEFT)
-
-    internal_windows = tkinter.Frame(self.popup, width=200, height=10)
-    internal_windows.pack(side=tkinter.TOP)
-    label = ttkinter.Label(internal_windows, text='Phenotype selection ' +
-                            'thresholds:')
-    label.config(width=200)
-    label.pack(side=tkinter.LEFT)
-
-    internal_windows = tkinter.Frame(self.popup, width=200, height=10)
-    internal_windows.pack(side=tkinter.TOP)
-#        label = ttkinter.Label(internal_windows, text='Number')
-#        label.config(width=12)
-#        label.pack(side=tkinter.LEFT)
-    label_width1 = 21
-    label_width2 = 18
-    label = ttkinter.Label(internal_windows, text='Region',
-                            anchor="center")
-    label.config(width=label_width1)
-    label.pack(side=tkinter.LEFT)
-    label = ttkinter.Label(internal_windows, text='Marker',
-                            anchor="center")
-    label.config(width=label_width1)
-    label.pack(side=tkinter.LEFT)
-    label = ttkinter.Label(internal_windows, text='Intensity',
-                            anchor="center")
-    label.config(width=label_width1)
-    label.pack(side=tkinter.LEFT)
-    label = ttkinter.Label(internal_windows, text='Threshold',
-                            anchor="center")
-    label.config(width=label_width2)
-    label.pack(side=tkinter.LEFT)
-    label = ttkinter.Label(internal_windows, text='Phenotype',
-                            anchor="center")
-    label.config(width=label_width2)
-    label.pack(side=tkinter.LEFT)
-
-    self.QuickPheno = []
-    x1_pointers = ['Nucleus', 'Cell']
-    x2_pointers = self.Channel_pointers[self.activeImage]
-    x3_pointers = ['Mean Intensity', 'Maximum Intensity',
-                    'Minimum Intensity', 'Total Intensity', 'STD Intensity']
-    for Channel_int in ["CD3", "CD20", "CD8", "CK", "CD56", "CD68"]:
-        internal_windows = tkinter.Frame(self.popup, width=100, height=10)
-        internal_windows.pack(side=tkinter.TOP)
-        self.QuickPheno.append(internal_windows)
-        x_variable1 = tkinter.StringVar(internal_windows)
-        x_variable1.set(x1_pointers[1])
-        self.QuickPheno.append(x_variable1)
-        x_var_pointer1 = tkinter.OptionMenu(internal_windows, x_variable1,
-                                            *x1_pointers)
-        x_var_pointer1.config(width=15)
-        x_var_pointer1.pack(side=tkinter.LEFT)
-        x_variable2 = tkinter.StringVar(internal_windows)
-        x_variable2.set(Channel_int)
-        self.QuickPheno.append(x_variable2)
-        x_var_pointer2 = tkinter.OptionMenu(internal_windows, x_variable2,
-                                            *x2_pointers)
-        x_var_pointer2.config(width=15)
-        x_var_pointer2.pack(side=tkinter.LEFT)
-        x_variable3 = tkinter.StringVar(internal_windows)
-        x_variable3.set(x3_pointers[1])
-        self.QuickPheno.append(x_variable3)
-        x_var_pointer3 = tkinter.OptionMenu(internal_windows, x_variable3,
-                                            *x3_pointers)
-        x_var_pointer3.config(width=15)
-        x_var_pointer3.pack(side=tkinter.LEFT)
-        labelButton = tkinter.Entry(internal_windows)
-        self.QuickPheno.append(labelButton)
-        labelButton.pack(side=tkinter.LEFT)
-        labelButton.insert(0, "10")
-        labelButton.config(width=15)
-        labelButton = tkinter.Entry(internal_windows)
-        self.QuickPheno.append(labelButton)
-        labelButton.pack(side=tkinter.LEFT)
-        labelButton.insert(0, Channel_int + "+")
-        labelButton.config(width=15)
-    internal_windows = tkinter.Frame(self.popup, width=200, height=10)
-    internal_windows.pack(side=tkinter.TOP)
-    self.QuickPheno.append(internal_windows)
-    addQuickButton = ttkinter.Button(
-            internal_windows, text="Add Phenotype", command=addQuick)
-    addQuickButton.pack(side=tkinter.LEFT, padx=2, pady=2)
-    rmvQuickButton = ttkinter.Button(
-            internal_windows, text="Remove Phenotype",
-            command=rmvQuick)
-    rmvQuickButton.pack(side=tkinter.LEFT, padx=2, pady=2)
-    labelButton = tkinter.Entry(internal_windows)
-    self.QuickPheno.append(labelButton)
-    labelButton.pack(side=tkinter.LEFT)
-    labelButton.insert(0, "1")
-    internal_windows = tkinter.Frame(self.popup, width=200, height=10)
-    internal_windows.pack(side=tkinter.TOP)
-    self.QuickPheno.append(internal_windows)
-    doQuickButton = ttkinter.Button(internal_windows, text="Perform Ana" +
-                                    "lysis", command=QuickIntAnalysis)
-    doQuickButton.pack(side=tkinter.LEFT, padx=2, pady=2)
-    doQuickLikeButton = ttkinter.Button(
-            internal_windows, text="Perform Analysis Like",
-            command=QuickIntAnalysisLike)
-    doQuickLikeButton.pack(side=tkinter.LEFT, padx=2, pady=2)
-    doQuickAllButton = ttkinter.Button(
-            internal_windows, text="Perform Current Analysis on all",
-            command=QuickIntAnalysisAll)
-    doQuickAllButton.pack(side=tkinter.LEFT, padx=2, pady=2)
-    internal_windows = tkinter.Frame(self.popup, width=200, height=10)
-    internal_windows.pack(side=tkinter.TOP)
+            popup2,
+            text="You are about to overwrite all your analysis")
+    label.pack(side="top", fill="x", pady=10)
+    B1 = ttkinter.Button(
+            popup2, text="Okay",
+            command=lambda: [DestroyTK(popup2),
+                                QuickAnalysisAllSure()])
+    B1.pack()
+    B2 = ttkinter.Button(popup2, text="Go Back",
+                            command=lambda:[DestroyTK(popup2)])
+    B2.pack()
+    popup2.mainloop()
 
 def QuickAnalysisLikeSure(self):
     def Perform_tissue_analysis(tissue_keys):
