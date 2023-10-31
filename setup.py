@@ -1,11 +1,5 @@
 import cx_Freeze
 import sys
-import os
-import scipy.ndimage
-import xlwt
-import scipy
-import scipy.spatial
-from os import path
 
 base = None
 

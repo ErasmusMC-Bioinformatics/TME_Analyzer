@@ -47,7 +47,7 @@ def check_consent():
         popuplicense.wm_title("License")
         label = tkinter.Label(
             popuplicense, text='MIT License\n'+
-            '\nCopyright (c) 2023 github.com/balciemrah\n' +
+            '\nCopyright (c) 2023 github.com/ErasmusMC-Bioinformatics & github.com/balciemrah\n' +
             '\nPermission is hereby granted, free of charge, to any person obtaining a copy ' +
             '\nof this software and associated documentation files (the "Software"), to deal ' +
             '\nin the Software without restriction, including without limitation the rights ' +
@@ -307,7 +307,7 @@ class ImageAnalysis:
         self.Channel_pointers = []
         self.FileDictionary = {}
         self.ThresholdValues = []
-        self.activeImage = []
+        self.activeImage = 0
         self.n_channels = []
         self.activeROI = []
         self.im_analyzed = []

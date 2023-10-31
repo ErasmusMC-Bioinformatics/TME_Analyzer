@@ -1217,7 +1217,7 @@ def DataAnalysis(self):
                         continue
                     dists_temp_orig = get_dists(cell1xy,cell2xy)
                     dists_temp_orig[dists_temp_orig==0] = np.inf
-                    n_cells = np.sum(dists_temp <= n_dist)
+                    n_cells = np.sum(dists_temp_orig <= n_dist)
                     min_dist = n_cells/cell2xy.shape[0]
                     phenotypes.append(pheno_temp + ' ' + NNA_relation + ' '
                                         + NNA_dist + ' ' + pheno_temp2)
@@ -1364,7 +1364,7 @@ def DataAnalysis(self):
                             number_density, density)
                 dists_temp_orig = get_dists(cell1xy,cell2xy)
                 dists_temp_orig[dists_temp_orig==0] = np.inf
-                n_cells = np.sum(dists_temp <= n_dist)
+                n_cells = np.sum(dists_temp_orig <= n_dist)
                 min_dist = n_cells/cell2xy.shape[0]
                 phenotypes.append(pheno_temp + ' ' + NNA_relation + ' '
                                     + NNA_dist + ' ' + pheno_temp2)
