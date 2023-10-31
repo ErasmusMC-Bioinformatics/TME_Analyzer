@@ -2,42 +2,7 @@
 """
 Created on Thu Aug  2 17:17:39 2018
 
-@author: 043212
-fix software as everything in tissue segmentation is now based on filtered image; this especially happens when you want to use more than 1 channel for segmentation
-fixed the distances
-make a note under nucleus segmentation that you are about to overwrite your neural network segmentation
-added image for CK
-export images: based on
-pip install --ignore-installed --upgrade tensorflow-gpu==1.15.0
-skimage.measure.regionprops_table(labelled, properties('label', 'area'))
-skimage.segmentation
-cellpose - ML based nucleus and cell segmentation
-pyimagej - imagej in python?
-ipywidgets: widgets/buttons for display
-webapp based on voila
-broad bioimage benchmark collection: annotated image database for testing and validation
-import re => regular expressions, to recover index from images
-bulk unmix TO BE CHECKED
-implement machine learning based auto analysis,with the results being alterable
-implement maud & marjolein analysis files
-morphological reconstuction following stardist to generate cell-masks;
-with watershed?
-ijgranulometry: apply struturing elements with increasing size, the derivative of the evolution gives you structure size; e.g. variation of gray-scale intensity
-new drop-menu: automated analysis; includes quick analysis; with side menu reapply analysis and perform analysis like becomes part of this bar
-import ilastik outputs?
-enable perform analysis on all for inform segmentations - ?
-estimate 3D parameters
-spatiometric information (NNA) as heatmaps
-generate touch matrix to see which cells are touching
-2D distance maps for cell-cell distances! use this to increase the speed of NNA;
-touch matrix to mash; touch matrix multiplied by distance matrix for distance map
-number of touching cells as maps; touching/distance to a certain phenotype
-clustering analysis on paramtEers such as density and NNA
-concentric spatial density plots for stitched images
-export report as HTML
-contrast slider on display window
-place a button to change right-window setup to single marker variation
-get add channel setup to work, and enable color definitions
+@author: github.com/balciemrah
 """
 
 import tkinter
