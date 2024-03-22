@@ -172,6 +172,8 @@ class ImageAnalysis:
                              command=lambda:[dMO.QuickAnalysisAll(self)])
         dataMenu.add_command(label="Reanalyze Image Like ...",
                              command=lambda:[dMO.QuickAnalysisLike(self)])
+        dataMenu.add_command(label="Reanalyze Using default analysis",
+                             command=lambda:[dMO.Apply_default_analysis(self)])
         dataMenu.add_separator()
         dataMenu.add_command(label="Redo Analysis",
                              command=lambda:[dMO.RedoAnalysis(self)])

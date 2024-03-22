@@ -38,6 +38,67 @@ from imageMenu import DestroyTK, popupmsg
 # import openTSNE
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
+def Apply_default_analysis(self):
+    def Apply_default_analysis_sure(*a):
+        self.analysis_params[self.activeImage] = {
+            'Segments': {
+                'DAPI-Filter': {'Visible': False, 'filter_1': 0, 'filter_2': 1000, 'filter_type1': 'Gaussian', 'filter_type2': 'Uniform', 'operator': '-', 'Ch_name': 'DAPI'},
+                'CD8-Filter': {'Visible': False, 'filter_1': 0, 'filter_2': 1000, 'filter_type1': 'Gaussian', 'filter_type2': 'Uniform', 'operator': '-', 'Ch_name': 'CD8'},
+                'CD20-Filter': {'Visible': False, 'filter_1': 0, 'filter_2': 1000, 'filter_type1': 'Gaussian', 'filter_type2': 'Uniform', 'operator': '-', 'Ch_name': 'CD20'},
+                'CD3-Filter': {'Visible': False, 'filter_1': 0, 'filter_2': 1000, 'filter_type1': 'Gaussian', 'filter_type2': 'Uniform', 'operator': '-', 'Ch_name': 'CD3'},
+                'CD68-Filter': {'Visible': False, 'filter_1': 0, 'filter_2': 1000, 'filter_type1': 'Gaussian', 'filter_type2': 'Uniform', 'operator': '-', 'Ch_name': 'CD68'},
+                'CD56-Filter': {'Visible': False, 'filter_1': 0, 'filter_2': 1000, 'filter_type1': 'Gaussian', 'filter_type2': 'Uniform', 'operator': '-', 'Ch_name': 'CD56'},
+                'CK-Filter': {'Visible': False, 'filter_1': 0, 'filter_2': 1000, 'filter_type1': 'Gaussian', 'filter_type2': 'Uniform', 'operator': '-', 'Ch_name': 'CK'},
+                'DAPI': {'thres': 'Stardist_2D_versatile_fluo', 'ch_used': 'DAPI', 'n_ch_used': 0, 'class': 'Nuc', 'NucLimits': 'Stardist_2D_versatile_fluo', 'CellLimits': np.inf, 'CellMeth': 'Extend Cell Area To:', 'd_prob_thres': 0.0, 'd_nms_thres': 0.0},
+                'CK_filtered': {'Visible': True, 'filter_1': 10, 'filter_2': 5000, 'filter_type1': 'Gaussian', 'filter_type2': 'Minimum', 'operator': 'and-', 'Ch_name': 'CK', 'normalize': 0},
+                'Tumor': {'thres': np.array([[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  1.], [np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf]]), 'adaptive_size': np.array([0., 0., 0., 0., 0., 0., 0., 0., 0.]), 'ForeLimits': [5000, np.inf], 'HoleLimits': [5000, np.inf], 'ExcludeEdges': False}},
+            'Phenotypes': {
+                'CD8+': {'x_axis0': 'Linear', 'x_axis1': 'Nucleus', 'x_axis2': 'Geometry', 'x_axis3': 'Area', 'y_axis0': 'Log', 'y_axis1': 'Cell', 'y_axis2': 'CD8', 'y_axis3': 'Mean Intensity', 'positive_area': [], 'hist_limits': np.array([[0. , 0.4], [np.inf, np.inf]])},
+                'CD20+': {'x_axis0': 'Linear', 'x_axis1': 'Nucleus', 'x_axis2': 'Geometry', 'x_axis3': 'Area', 'y_axis0': 'Log', 'y_axis1': 'Cell', 'y_axis2': 'CD20', 'y_axis3': 'Mean Intensity', 'positive_area': [], 'hist_limits': np.array([[0. , 0.7], [np.inf, np.inf]])},
+                'CD3+': {'x_axis0': 'Linear', 'x_axis1': 'Nucleus', 'x_axis2': 'Geometry', 'x_axis3': 'Area', 'y_axis0': 'Log', 'y_axis1': 'Cell', 'y_axis2': 'CD3', 'y_axis3': 'Mean Intensity', 'positive_area': [], 'hist_limits': np.array([[0. , 0.3], [np.inf, np.inf]])},
+                'CD68+': {'x_axis0': 'Linear', 'x_axis1': 'Nucleus', 'x_axis2': 'Geometry', 'x_axis3': 'Area', 'y_axis0': 'Log', 'y_axis1': 'Cell', 'y_axis2': 'CD68', 'y_axis3': 'Mean Intensity', 'positive_area': [], 'hist_limits': np.array([[ 0.,  1.], [np.inf, np.inf]])},
+                'CD56+': {'x_axis0': 'Linear', 'x_axis1': 'Nucleus', 'x_axis2': 'Geometry', 'x_axis3': 'Area', 'y_axis0': 'Log', 'y_axis1': 'Cell', 'y_axis2': 'CD56', 'y_axis3': 'Mean Intensity', 'positive_area': [], 'hist_limits': np.array([[0. , 0.7], [np.inf, np.inf]])},
+                'CK+': {'x_axis0': 'Linear', 'x_axis1': 'Nucleus', 'x_axis2': 'Geometry', 'x_axis3': 'Area', 'y_axis0': 'Log', 'y_axis1': 'Cell', 'y_axis2': 'CK', 'y_axis3': 'Mean Intensity', 'positive_area': [], 'hist_limits': np.array([[0. , 0.1], [np.inf, np.inf]])}},
+            'Foreground': {'thres': [np.array([0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.    ]), np.array([np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf])], 'adaptive_size': np.array([1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000,    0]), 'ForeLimits': [5000, np.inf], 'HoleLimits': [5000, np.inf], 'ExcludeEdges': False}}
+        self.Analysis_like = self.activeImage
+        QuickAnalysisLikeSure(self)
+    if len(self.FileDictionary) == 0:
+        popupmsg("Please first open an image file")
+    else:
+        Channel_pointers = self.Channel_pointers[self.activeImage][:self.n_channels[self.activeImage]]
+        if (len(Channel_pointers) == 8):
+            if False not in [i in Channel_pointers for i in ['CD3','CD8','CD20','CD56','CD68','CK','DAPI']]:
+                popup2 = tkinter.Tk()
+                popup2.wm_title("Are you sure?")
+                label = tkinter.Label(popup2, text="You are about to overwrite your current analysis")
+                label.pack(side="top", fill="x", pady=10)
+                B1 = tkinter.Button(popup2, text="Go Ahead",
+                                    command=lambda: [DestroyTK(popup2),
+                                                     Apply_default_analysis_sure()])
+                B1.pack()
+                B2 = tkinter.Button(popup2, text="Go Back", command=lambda:[DestroyTK(popup2)])
+                B2.pack()
+                popup2.mainloop()
+            else:
+                popup2 = tkinter.Tk()
+                popup2.wm_title("Incorrect Channels!")
+                label = tkinter.Label(popup2, text="The channels provided do not match the default analysis setting " +
+                                      "CD3, CD8, CD20, CD56, CD68, CK, DAPI, background. ")
+                label.pack(side="top", fill="x", pady=10)
+                B2 = tkinter.Button(popup2, text="Go Back", command=lambda:[DestroyTK(popup2)])
+                B2.pack()
+                popup2.mainloop()
+        else:
+            popup2 = tkinter.Tk()
+            popup2.wm_title("Incorrect Channels!")
+            label = tkinter.Label(popup2, text="The channels provided do not match the default analysis setting " +
+                                    "CD3, CD8, CD20, CD56, CD68, CK, DAPI, background. ")
+            label.pack(side="top", fill="x", pady=10)
+            B2 = tkinter.Button(popup2, text="Go Back", command=lambda:[DestroyTK(popup2)])
+            B2.pack()
+            popup2.mainloop()        
+
+
 def PhenotypeSelection(self):
     if "Tumor" in self.analyze_index[self.activeImage]:
         banned_seg_names = ["DAPI", "Tumor", "Stroma", "Tumor+", "Stroma+"]
