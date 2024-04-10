@@ -35,7 +35,7 @@ By pressing "Add Channels Setup", you can setup your own channel names, which wi
 For the sample analysis, press "Add Channel" 7 times (so the total number of channels are 8).
 And name them in the order of "DAPI", "CD8", "CD20", "CD3", "CD68", "CD56", "CK" and "background".
 The corresponding colors used in the manuscript, which can be selected from the dropdown, are blue, red, yellow, green, orange, magenta, cyan and black.
-![](./images/Channel setup.png)
+![](https://github.com/ErasmusMC-Bioinformatics/TME_Analyzer/blob/main/images/Channel%20setup.png)
 You can save this channel setup by clicking "Save Setup to File", or load saved setup by clicking "Load Setup".
 Once done, press "Save and Close".
 
