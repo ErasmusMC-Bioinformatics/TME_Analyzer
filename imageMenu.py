@@ -1231,6 +1231,10 @@ def ThresholdForeground(self):
         foreground_threshold = [
                 np.zeros(n_channels), np.full(n_channels, np.inf)]
     popup = tkinter.Tk()
+    while len(foreground_threshold[0]) < n_channels:
+        foreground_threshold = [np.append(foreground_threshold[0],0), np.append(foreground_threshold[1],np.inf)]
+    while len(self.adaptive_temp) < n_channels:
+        self.adaptive_temp = np.append(self.adaptive_temp,0)
     self.foreground_threshold[self.activeImage] = foreground_threshold
     self.fore_thres_temp = np.array(foreground_threshold)
     self.popup = popup
@@ -2726,6 +2730,10 @@ def FillHoles(self):
                 "Foreground"]["adaptive_size"]
         else:
             adaptive_temp = np.zeros(n_channels)
+        while len(fore_thres[0]) < n_channels:
+            fore_thres = [np.append(fore_thres[0],0), np.append(fore_thres[1],np.inf)]
+        while len(adaptive_temp) < n_channels:
+            adaptive_temp = np.append(adaptive_temp,0)
         self.foreground_threshold[self.activeImage] = fore_thres
         im_temp = np.zeros((im_raw.shape[0], im_raw.shape[1]),
                             dtype=np.bool)
@@ -2842,6 +2850,10 @@ def FillHoles(self):
                     "Segments"][segName]["adaptive_size"]
         else:
             adaptive_thres = np.zeros(n_channels)
+        while len(seg_thres[0]) < n_channels:
+            seg_thres = [np.append(seg_thres[0],0), np.append(seg_thres[1],np.inf)]
+        while len(adaptive_thres) < n_channels:
+            adaptive_thres = np.append(adaptive_thres,0)
         for i in range(n_channels):
             to_plot = im_raw[:, :, i]
             if adaptive_thres[i] > 0:
