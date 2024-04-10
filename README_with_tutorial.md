@@ -76,7 +76,7 @@ TIP: If you want to assign a minimal value for the threshold, without a maxima, 
 Repeat steps 1-5 for CD8, CD20, CD3, CD68, CD56 and CK. If the values you observe next to a channel differentiate significantly from "0.1 - inf", select this channel, press "Remove Mask" and repeat steps 1-5 for this channel.
 When all channels are assigned, press Show Joint Mask to see your foreground mask.
 
-
+![](https://github.com/ErasmusMC-Bioinformatics/TME_Analyzer/blob/main/images/Foreground_selection.png)
 
 When satisfied, press "Save and Quit" to save and close the Threshold Foreground, and return to the main image analysis window.
 
