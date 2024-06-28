@@ -32,12 +32,11 @@ The channel setup should be input to the software before loading of images in or
 This is achieved by going to `Loading -> Change Channel Setup`, which opens a new window.
 Here you should see a dropdown that is set to Default, with no other options present. 
 By pressing `Add Channels Setup`, you can setup your own channel names, which will appear in this dropdown.
-For the sample analysis, press `Add Channel` 7 times (so the total number of channels are 8).
-And name them in the order of "DAPI", "CD8", "CD20", "CD3", "CD68", "CD56", "CK" and "background".
-The corresponding colors used in the manuscript, which can be selected from the dropdown, are blue, red, yellow, green, orange, magenta, cyan and black.
+For the sample analysis, press `Add Channel` 7 times (so, the total number of channels are 8).
+And name them in the order of "DAPI", "CD8", "CD20", "CD3", "CD68", "CD56", "CK" and "background". Note that, when you want to set up your own channels, this has to correspond to the order they appear in your images. The corresponding colors used in the manuscript, which can be selected from the dropdown, are blue, red, yellow, green, orange, magenta, cyan and black.
 ![](https://github.com/ErasmusMC-Bioinformatics/TME_Analyzer/blob/main/images/Channel_setup.png)
 
-You can save this channel setup by clicking `Save Setup to File`, or load saved setup by clicking `Load Setup`.
+You can save this channel setup by clicking `Save Setup to File`, or load any previously saved setup by clicking `Load Setup`.
 Once done, press `Save and Close`.
 
 Now this setup should appear in the dropdown as:
@@ -46,7 +45,7 @@ Now this setup should appear in the dropdown as:
 Alternatively, if you press `Load default channels`, again a new dropdown option will appear: 
 "TNBC: DAPI:blue, CD8:red, CD20:yellow, CD3:green, CD68:orange, CD56:magenta, CK:cyan"
 
-Select the channel setup of preference, and press confirm.
+Select the channel setup of preference, and press `confirm`.
 
 ### Image loading
 You can open image loading window by going through `Loading -> Load Image` or directly pressing the `Load Image` in the toolbar. This allows you to load multiple tiff images. 
@@ -58,11 +57,11 @@ Go ahead and load the provided image, "sample image (1).tif". This should now pr
 `Load Folder` is specifically designed for loading outputs of Vectra imaging, where images with "_component_data.tif" ending are loaded, with the options of combining images, stitching them (based on their coordinates outputted from the Vectra imaging platform) and downscaling.
 
 ### Threshold Foreground
-The first step of the image analysis is to discriminate the tissue from non tissue. You can reach the foreground thresholding through `Image Analysis -> Threshold` Foreground, or by clicking `Threshold Foreground` in the toolbar.
+The first step of the image analysis is to discriminate the tissue from non-tissue. You can reach the foreground thresholding through `Image Analysis -> Threshold` Foreground, or by clicking `Threshold Foreground` in the toolbar.
 
-This will open a new window with the name Foreground Selection, where on the left you see the image, and the right a histogram, belonging to the first channel, and under it a number of options and levels. The histogram is clickable and allows you to update the thresholds for foreground. At the top in the toolbar, you also see a `Adaptive Threshold` preceded by an unclicked checkbox and a default value of 100. Now change this value to 1000 and click the checkbox. This should change the histogram displayed at the right, but not affect the image. What this option does is it subtracts the original image uniform filtered by the value displayed here from the original image. This is the background correction that is used throught our analysis. Whenever you change the size of the `Adaptive Threshold` you need to unclick and click the checkbox again to activate the new size.
+This will open a new window with the name Foreground Selection, where on the left you see the image, and the right a histogram, belonging to the first channel, and under it a number of options and levels. The histogram is clickable and allows you to update the thresholds for foreground. At the top in the toolbar, you also see an `Adaptive Threshold` preceded by an unclicked checkbox and a default value of 100. Now change this value to 1000 and click the checkbox. This should change the histogram displayed at the right and the image mask, but not the original image. What this option does is it subtracts the original image uniform filtered by the value displayed here from the original image. This in principle corrects for any uneven background illumination and is the background correction that is used through our analysis. Whenever you change the size of the `Adaptive Threshold` you need to unclick and click the checkbox again to activate the new size.
 
-Now that you know how to generate histograms of background corrected image, let's assign some thresholds. When you hover in the histogram area, you can see the location of your cursor at the top of the histogram. The x-values will be the thresholds selected. You assign the thresholds by click-and-drag on the histogram.  When you do so, you will realize that the image will change, where the non-tissue will be diplayed grayish, and tissue display will remain the same. Once you are satisfied with the foreground of a selected channel, you can press `Add Mask` at the right, and this will then show the range of the histogram you have selected. Note that if the upper boundary of the range you selected is higher than the maximum value in the image, infinity will be assigned to the upper boundary instead. If you are not happy with the channel selected, you can always press `Remove Mask`, which will remove the current channel. You can switch between channels by the dropdown menu under the histogram. Note that when the channel is changes, it will change also the `Adaptive Threshold` to the saved settings for individual channels. In  case there was no prior saving, this means the `Adaptive Threshold` will be set to 100 and turned off.
+Now that you know how to generate histograms of background corrected image, let's assign some thresholds. When you hover in the histogram area, you can see the location of your cursor at the top of the histogram. The x-values will be the thresholds selected. You assign the thresholds by click-and-drag on the histogram.  When you do so, you will realize that the image will change, where the non-tissue will be displayed grayish, and tissue display will remain the same. Once you are satisfied with the foreground of a selected channel, you can press `Add Mask` at the right, and this will then show the range of the histogram you have selected. Note that if the upper boundary of the range you selected is higher than the maximum value in the image, infinity will be assigned to the upper boundary instead. If you are not happy with the channel selected, you can always press `Remove Mask`, which will remove the current channel. You can switch between channels by the dropdown menu under the histogram. Note that when the channel is changes, it will change also the `Adaptive Threshold` to the saved settings for individual channels. In  case there was no prior saving, this means the `Adaptive Threshold` will be set to 100 and turned off.
 
 TIP: If you want to assign a minimal value for the threshold, without assigning a maxima, after click-and-drag, double click with the mouse. Now when you press `Add Mask`, you will see that the maximum value does not change. Here, if you already have a range selected, the maximum again does not change and remains the previous assigned value. If you want the upper boundary to be infinity instead, you will first have to click `Remove Mask` before the click-drag-double click sequence.
 
@@ -73,8 +72,8 @@ TIP: If you want to assign a minimal value for the threshold, without assigning 
 4. click-and-drag the mouse at the histogram, aiming for a value around 0.1, and release, double-click. You will see the image change.
 5. Press `Add Mask` to add the mask corresponding to DAPI to the Foreground. You will see the numbers next to the blue-DAPI change from "0.0 - inf" to the selected threshold values.
 
-Repeat steps 1-5 for CD8, CD20, CD3, CD68, CD56 and CK. If the values you observe next to a channel differentiate significantly from "0.1 - inf", select this channel, press `Remove Mask` and repeat steps 1-5 for this channel.
-When all channels are assigned, press Show Joint Mask to see your foreground mask. This is then all the masks added together. So signals in the background corrected image of any channel higher than the assigned threshold value (which should be around 0.1) is now a part of the foreground mask
+Repeat steps 1-5 for CD8, CD20, CD3, CD68, CD56 and CK, but not for the background channel. If the values you observe next to a channel differentiate significantly from "0.1 - inf", select this channel, press `Remove Mask` and repeat steps 1-5 for this channel.
+When all channels are assigned, press Show Joint Mask to see your foreground mask. This is then all the masks added together. So, signals in the background corrected image of any channel higher than the assigned threshold value (which should be around 0.1) is now a part of the foreground mask
 
 ![](https://github.com/ErasmusMC-Bioinformatics/TME_Analyzer/blob/main/images/Foreground_selection.png)
 
@@ -91,7 +90,7 @@ Go to `Image Analysis -> Filter Image` to open the image filtering module. Here 
 #### Gaussian filtering of CK signal
 Prior to tissue segmentation, we should register (i.e., `Add Image`) the gaussian filtered CK channel for tumor segmentation. First change the channel to CK by changing the second from right dropdown at the top from "DAPI" to "CK". To facilitate the observation in real-time the effect of this filtration, best to also change the top right dropdown from "Composite" to "white" or to a color of choice.
 
-Leave the first dropdown at "Gaussian filter", change the number from 3 to 10, change the operation from "-" to "and-", the second filter from "Gaussian filter" to "Minimum" and the second number from 30 to 1000. Here the operation "and-" performs the second filter on the image that has already been processed with the first filter and then performs the subtraction of the second filtered image from the first; whereas the "-" operation performs both filters on the original image and then performs the subtraction. At this point, the image has not changed yet. You need to activate the individual filters by clicking the checkboxes. If the checkboxes are clicked while changing the filter type or size, the image is updated in real-time. Here, leave the checkbox after "Normalize" unclicked. This function normalizes the range of the filtered image so the minimal signal is 0 and the maximum is 1, which is not what we want for these images.
+Leave the first dropdown at "Gaussian filter", change the number from 3 to 10, change the operation from "-" to "and-", the second filter from "Gaussian filter" to "Minimum filter" and the second number from 30 to 1000. Here the operation "and-" performs the second filter on the image that has already been processed with the first filter and then performs the subtraction of the second filtered image from the first; whereas the "-" operation performs both filters on the original image and then performs the subtraction. At this point, the image has not changed yet. You need to activate the individual filters by clicking the checkboxes. If the checkboxes are clicked while changing the filter type or size, the image is updated in real-time. Here, leave the checkbox after "Normalize" unclicked. This function normalizes the range of the filtered image so the minimal signal is 0 and the maximum is 1, which is not what we want for these images.
 
 ![](https://github.com/ErasmusMC-Bioinformatics/TME_Analyzer/blob/main/images/CK_filter.png)
 
@@ -113,7 +112,7 @@ While we are still at the filtering window, we can also register the background 
 
 ### Tissue segmentation
 You can open the Tissue Segmentation window either through `Image Analysis -> Tissue Segmentation` or by clicking `Tissue Segmentation` at the toolbar.
-You see a similar window to the that of the Foreground Selection. Under the histogram, change the selected channel to the CK_filtered that we created in the previous step. You will then see a very clear seperation of positive and negative signals in the histogram. Click-and-drag to make a selection from around 1 to he maximum of the x-axis and press `Add Channel`. You should see the range next to the CK_filtered change to 1 to infinity. Keep in mind that for upper limit of the range to go to infinity, the upper limit of your range selection has to higher than the highest value on the histogram.
+You see a similar window to the that of the Foreground Selection. Under the histogram, change the selected channel to the CK_filtered that we created in the previous step. You will then see a very clear separation of positive and negative signals in the histogram. Click-and-drag to make a selection from around 1 to the maximum of the x-axis and press `Add Channel`. You should see the range next to the CK_filtered change to 1 to infinity. Keep in mind that for upper limit of the range to go to infinity, the upper limit of your range selection has to higher than the highest value on the histogram.
 
 Once satisfied, click `Add Segment`. Here in the new window titled "Add Segment" there is a dropdown menu with the names "DAPI", "Tumor", "Stroma" and "other". Select "Tumor" and press `Okay`.
 
@@ -137,7 +136,7 @@ For cell segmentation, we will be using the stardist algorithm (https://github.c
 #### Notes on stardist segmentation
 Relating to the options in the Neural Networks Segmentation
 - If you unclick the checkbox next to Nucleus segmentation, you can choose the name your segmentation masks as you wish.
-- Changing the Threshold would change the amount of signal assigned to nucleus, whereas non-maximum suppression would change the amount of segmentation. Further details can be found in the startist website (https://github.com/stardist/stardist).
+- Changing the Threshold would change the amount of signal assigned to nucleus, whereas non-maximum suppression would change the amount of segmentation. Further details can be found in the stardist website (https://github.com/stardist/stardist).
 - "Extend Cell Area To:" assigns regions to cells, starting from the nucleus, within the foreground until either the value of the cell area reaches the indicated value, or the boundary of the cell reaches the boundary of the adjacent cell.
 - If you change the "Extend Cell Area To:" dropdown to "Extend Cells:" assigns regions to cells, starting from the nucleus, within the foreground until either the distance from the nucleus boundary to the cell boundary reaches the indicated value, or the boundary of the cell reaches the boundary of the adjacent cell.
 - Pressing `Preview` would show the segmentation in the main image window without saving it.
@@ -154,30 +153,30 @@ After segmentation of nuclei and cells, we can go ahead with phenotying the cell
 1. Change the second dropdown on the y-axis from "Nucleus" to "Cell"
 2. Change the third dropdown on the y-axis from "Geometry" to "CD8"
 The first and last dropdowns are to be "Linear" and "Mean Intensity", which are also the default settings
-3. Press the `Add Phenotype` button an the right this activates the cursor to selection mode.
+3. Press the `Add Phenotype` button at the right, which activates the cursor to selection mode.
 4. Drag the range at the right axis to get values higher than 0.4. 
-NOTE: At this point you can turn on the `Show pop` option to see on the image in the main window the selected population (shown in red) and the non-selected population (shown in blue). For clear visiulaization, in the main window, you can unclick the check-box next to display to turn off all channels and click the check-box next to CD8 to only show this channel. These steps will overwrite the `Show pop` option, you can reactivate it by clicking it again in the "Phenotype Selection" window. Here you can also change the size of the cell location indicators by dragging the "Point Size" slider at the top.
+NOTE: At this point you can turn on the `Show pop` option to see on the image in the main window the selected population (shown in red) and the non-selected population (shown in blue). For clear visualization, in the main window, you can unclick the check-box next to display to turn off all channels and click the check-box next to CD8 to only show this channel. These steps will overwrite the `Show pop` option, you can reactivate it by clicking it again in the "Phenotype Selection" window. Here you can also change the size of the cell location indicators by dragging the "Point Size" slider at the top.
 ![](https://github.com/ErasmusMC-Bioinformatics/TME_Analyzer/blob/main/images/CD8_phenotyping.png)
 ![](https://github.com/ErasmusMC-Bioinformatics/TME_Analyzer/blob/main/images/CD8_selection.png)
 5. Once you are satisfied, press `Save Selection` on the right of the "Phenotype Selection" window.
 6. Name your selection as "CD8+" and press `Okay`
 
-Here note that, in the main window, in addition to the new CD8+ phenotype, also two phenotypes, namely "Tumor+" and "Stroma+" are defined. These are based on the tissue segmentation and segregares the cells, based on the location of the center of their nuclei, into tumor compartment and stroma compartment cells, the latter being defined as the non-tumor compartment cells.
+Here note that, in the main window, in addition to the new CD8+ phenotype, also two phenotypes, namely "Tumor+" and "Stroma+" are defined. These are based on the tissue segmentation and segregates the cells, based on the location of the center of their nuclei, into tumor compartment and stroma compartment cells, the latter being defined as the non-tumor compartment cells.
 
 Repeat steps 1-6 for CD20 (threshold of 0.7), CD3 (0.3), CD68 (1), CD56 (0.7) and CK (0.1), naming them CD20+, CD3+, CD68+, CD56+ and CK+ respectively.
 
-At any point you can look at a particular phenotyping by selecting it at the dropdown menu at the right hand side of the "Phenotype Selection" window.
+At any point you can look at a particular phenotyping by selecting it at the dropdown menu at the right-hand side of the "Phenotype Selection" window.
 
 Once finished, close the phenotyping window. Now the image analysis is finished and your main window with the analysis images should like the following:
 ![](https://github.com/ErasmusMC-Bioinformatics/TME_Analyzer/blob/main/images/finished_analysis.png)
 
 #### Cell phenotyping visualizations
-This window is to facilitate the phenotype selection so feel free to play around with all the different buttons and drag controllers in the axis display to explore the possibilites.
+This window is to facilitate the phenotype selection so feel free to play around with all the different buttons and drag controllers in the axis display to explore the possibilities.
 
 ## Downstream analysis
-It is always a good practice to save your analysis when finished, and reapply it. So let's look at these two options first
+It is always a good practice to save your analysis when finished, and reapply it. So, let's look at these two options first
 ### Saving analysis
-You can save your image, analysis parameters and the analysis results by clicking `Saving -> Save Workplace`. This exports the image and analysis as a ".picle" file. 
+You can save your image, analysis parameters and the analysis results by clicking `Saving -> Save Workplace`. This exports the image and analysis as a ".pickle" file. 
 
 ### Loading analysis
 You can load saved analysis through `Load -> Load Workspace`.
@@ -211,4 +210,4 @@ You should end up more or less with the same analysis you have performed above. 
 - The analysis parameters through the `Data Analysis -> Display Log`, and pressing `Print params`. You would then have to change your analysis to the other (main window, dropdown at right bottom) and press `Print params` again.
 
 ## Final points
-Hope you made it here and are excited about TME-A. This tutorial does not cover all the aspects of the TME-A. So feel free to explore and contact us with any questions, feedback, ammendments you see necessary and bug reports. 
+Hope you made it here and are excited about TME-A. This tutorial does not cover all the aspects of the TME-A. So, feel free to explore and contact us with any questions, feedback, amendments you see necessary and bug reports. 
