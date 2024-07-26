@@ -1,37 +1,54 @@
+[![Black](https://github.com/balciemrah/TME_Analyzer_20240320/actions/workflows/black.yml/badge.svg)](https://github.com/balciemrah/TME_Analyzer_20240320/actions/workflows/black.yml)
+
 # TME_Analyzer
 
 ## Introduction
-TME-Analyzer is a stand alone software for analysis of fluorescent and other high-dimensional images that have a nuclear marker for cell detection. It comes with integrated quantification of cellular and tissue phenotypes, their densities in defined compartments and their interspacing, as well as visualization and exportation of data. This repository contains the Python code, as described in the paper:
+[TME-Analyzer](https://tme-facility.com/technology/tme-analyzer) is a stand alone software developed in the [Laboratory of Tumor Immunology, Erasmus MC](https://www.erasmusmc.nl/en/cancer-institute/research/groups/medical-oncology-tumor-immunology) for analysis of fluorescent and other high-dimensional images that have a nuclear marker for cell detection. It comes with integrated quantification of cellular and tissue phenotypes, their densities in defined compartments and their interspacing, as well as visualization and exportation of data. This repository contains the Python code, as described in the paper:
 
 - Hayri E Balcioglu, Rebecca Wijers, Marcel Smid, Dora Hammerl, Anita M Trapman-Jansen, Astrid Oostvogels, Mieke Timmermans, John WM Martens and Reno Debets. 
 [*TME-Analyzer: a new interactive and dynamic image analysis tool that identified immune cell distances as predictors for survival of triple negative breast cancer patients*](https://doi.org/10.1038/s44303-024-00022-6).  
 npj Imaging.
 
+The stand alone software can be downloaded [*here*](https://drive.usercontent.google.com/download?id=1maGzQBfjvbCphI1srRWiicWShfaJLmWm&export=download&authuser=0).
+
 Please cite the paper if you are using TME-Analyzer or (parts of) this code in your research.
 
-## Getting started
+## Getting started 
+
+Follow one of the following installations approaches (pip, venv or conda)
+
+### pip
+
+The pip installation was created by [*Rolf Harkes*](https://github.com/rharkes).
+
+Get python version 3.11.9
+- Create a venv: `python.exe -m venv .venv`
+- Activate the environment `./.venv/Scripts/Activate.ps1`; 
+  - Maybe with an execution policy:  `powershell -ExecutionPolicy Bypass -File "./.venv/Scripts/Activate.ps1"`
+- Install tmeanalyzer in [editable](https://pip.pypa.io/en/stable/cli/pip_install/#options) format with pip: `pip install -e .`
+  - You can install in developer mode with: `pip install -e .[dev]`
+- Run TME-Analyzer: `tmeanalyzer`
 
 ### Venv
 
-Get python version 3.8.10
+Get python version 3.11.9
 - Create a venv: `python.exe -m venv .venv`
 - Activate the environment `./.venv/Scripts/Activate.ps1`; 
   - Maybe with an execution policy:  `powershell -ExecutionPolicy Bypass -File "./.venv/Scripts/Activate.ps1"`
 - install dependencies: `python.exe -m pip install -r requirements.txt`
-  - note that requirements.txt give the minimal packages, and this should get all the packages in the requirements_extended.txt file
   
-And run: `python.exe TME_analyzer.py`
+And run: `python ./src/tmeanalyzer/TME_analyzer.py`
 
 ### Conda
 
 Run: `mamba env create -f environment.yml`
 
-And run: `python.exe TME_analyzer.py`
+And run: `python ./src/tmeanalyzer/TME_analyzer.py`
 
-## Cx-Freeze
+## Freeze it with pyinstaller to create a single executable (available in developer mode, tested on Windows and Ubuntu 22.04)
 
-Pack the project into a single binary with: 
-```python setup.py build```
+  - Creat a `.spec` file with: `pyi-makespec --onefile --noconsole --paths=./src/tmeanalyzer ./src/tmeanalyzer/TME_analyzer.py --hidden-import='PIL._tkinter_finder'`
+  - Create an executable with: `pyinstaller TME_analyzer.spec`
 
 ## Image analysis tutorial
 
